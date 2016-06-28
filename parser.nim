@@ -1,7 +1,7 @@
 import ast, constants, strutils
 
 type
-  ParserError = object of RootObj
+  ParserError* = object of RootObj
     msg: string
 
 proc parseNode(content: string): ASTNode =

@@ -1,8 +1,9 @@
 const
   EXPR_START* = "{{"
   EXPR_END* = "}}"
-  ESCAPE_START* = "{"
-  ESCAPE_END* = "}"
+  NO_ESCAPE_START* = "{"
+  NO_ESCAPE_END* = "}"
   BLOCK_START* = "#"
   BLOCK_END* = "/"
+  COMMENT* = "!"
   PARTIAL* = ">"

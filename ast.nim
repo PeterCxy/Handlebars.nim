@@ -11,7 +11,7 @@ type
   ASTBasicExpression* = ref object of ASTExpression
   ASTCommandExpression* = ref object of ASTExpression
     args*: Table[string, string]
-  ASTEscapeExpression* = ref object of ASTExpression
+  ASTNoEscapeExpression* = ref object of ASTExpression
   ASTPartialExpression* = ref object of ASTExpression
   ASTBlockExpression* = ref object of ASTExpression
     items*: string
