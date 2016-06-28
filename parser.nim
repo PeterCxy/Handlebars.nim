@@ -6,7 +6,9 @@ type
 
 proc parseNode(content: string): ASTNode =
   echo content # TODO: Remove me
-  if content.startsWith BLOCK_START:
+  if content.startsWith COMMENT:
+    result = nil
+  elif content.startsWith BLOCK_START:
     var list = content.replace(BLOCK_START, "").split(" ")
     result = newASTBlockExpression(list[0], list[1])
   elif content.startsWith BLOCK_END:
