@@ -13,6 +13,8 @@ proc parseNode(content: string): ASTNode =
     result = newASTBlockExpression(list[0], list[1])
   elif content.startsWith BLOCK_END:
     result = newASTBlockEndExpression(content.replace(BLOCK_END, ""))
+  elif (content.startsWith NO_ESCAPE_START) and (content.endsWith NO_ESCAPE_END):
+    result = newASTNoEscapeExpression(content[1..content.len - 2])
   else:
     result = newASTBasicExpression(content)
 
@@ -28,7 +30,7 @@ proc parse(source: string, current: var int, startTag: string): ASTTree =
     while true:
       var c = source[current]
 
-      if (not inQuotes) and (last & c == EXPR_END):
+      if (not inQuotes) and (last & c == EXPR_END) and (current >= source.len or "" & source[current + 1] != NO_ESCAPE_END):
         current += 1
         content = content[0..content.len - 2]
         break

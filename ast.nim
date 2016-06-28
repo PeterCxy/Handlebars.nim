@@ -30,6 +30,10 @@ proc newASTBasicExpression*(name: string): ASTBasicExpression =
   result = ASTBasicExpression()
   result.name = name
 
+proc newASTNoEscapeExpression*(name: string): ASTNoEscapeExpression =
+  result = ASTNoEscapeExpression()
+  result.name = name
+
 proc newASTBlockExpression*(name: string, items: string): ASTBlockExpression =
   result = ASTBlockExpression()
   result.name = name
