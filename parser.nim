@@ -1,8 +1,42 @@
-import ast, constants, strutils
+import ast, constants, strutils, tables
 
 type
   ParserError* = object of RootObj
     msg: string
+
+proc parseArgumentList(str: string, cmd: var string): Table[string, string] =
+  result = initTable[string, string]()
+
+  var list: seq[string] = @[]
+  var inQuotes = false
+  var arg = ""
+  for i in countup(0, str.len - 1):
+    var current = str[i]
+
+    if current == '"':
+      inQuotes = not inQuotes
+      continue
+    elif current == ' ' and not inQuotes:
+      if arg != "":
+        list.add arg
+      arg = ""
+      continue
+
+    arg &= current
+
+  if arg != "":
+    list.add arg
+
+  cmd = list[0]
+
+  if list.len > 1:
+    for i in countup(1, list.len - 1):
+      let splitted = list[i].split("=")
+
+      if splitted.len < 2:
+        result[""] = splitted[0]
+      else:
+        result[splitted[0]] = splitted[1]
 
 proc parseNode(content: string): ASTNode =
   echo content # TODO: Remove me
@@ -13,6 +47,10 @@ proc parseNode(content: string): ASTNode =
     result = newASTBlockExpression(list[0], list[1])
   elif content.startsWith BLOCK_END:
     result = newASTBlockEndExpression(content.replace(BLOCK_END, ""))
+  elif content.startsWith PARTIAL:
+    var cmd = ""
+    let list = parseArgumentList(content.replace(PARTIAL, ""), cmd)
+    result = newASTPartialExpression(cmd, list)
   elif (content.startsWith NO_ESCAPE_START) and (content.endsWith NO_ESCAPE_END):
     result = newASTNoEscapeExpression(content[1..content.len - 2])
   else:

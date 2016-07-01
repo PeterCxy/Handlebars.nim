@@ -12,7 +12,7 @@ type
   ASTCommandExpression* = ref object of ASTExpression
     args*: Table[string, string]
   ASTNoEscapeExpression* = ref object of ASTExpression
-  ASTPartialExpression* = ref object of ASTExpression
+  ASTPartialExpression* = ref object of ASTCommandExpression
   ASTBlockExpression* = ref object of ASTExpression
     items*: string
     childs*: ASTTree
@@ -42,3 +42,8 @@ proc newASTBlockExpression*(name: string, items: string): ASTBlockExpression =
 proc newASTBlockEndExpression*(name: string): ASTBlockEndExpression =
   result = ASTBlockEndExpression()
   result.name = name
+
+proc newASTPartialExpression*(name: string, args: Table[string, string]): ASTPartialExpression =
+  result = ASTPartialExpression()
+  result.name = name
+  result.args = args
